@@ -24,7 +24,7 @@ CREATE TABLE preguntas (
 -- Tabla de respuestas
 CREATE TABLE respuestas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    contenido TEXT NOT NULL,
+    contenido VARCHAR(500) NOT NULL,
     usuario_id INT NOT NULL,
     pregunta_id INT NOT NULL,
     fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
