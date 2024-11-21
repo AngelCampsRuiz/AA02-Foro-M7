@@ -4,8 +4,8 @@
 // Configuración de la base de datos
 $dbHost = 'localhost';
 $dbName = 'ForoDB';
-$dbUser = 'Agustin51';
-$dbPass = '';
+$dbUser = 'root';
+$dbPass = 'Agustin51';
 
 try {
     // Crear una nueva conexión PDO
@@ -17,7 +17,7 @@ try {
     echo "Conexión exitosa a la base de datos.";
 } catch (PDOException $e) {
     // Manejar errores de conexión
-    echo "Error de conexión: " . $e->getMessage();
+    echo "" . $e->getMessage();
     exit;
 }
 ?>
