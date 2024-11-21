@@ -1,0 +1,45 @@
+<?php
+session_start();
+include('./BDD/conexion.php');
+
+// Obtener preguntas y respuestas de la base de datos
+$preguntas = [];
+try {
+    $sql = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.nombre_usuario 
+            FROM preguntas p 
+            JOIN usuarios u ON p.usuario_id = u.id 
+            ORDER BY p.fecha_publicacion DESC";
+    $stmt = $conexion->query($sql);
+    $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error al obtener preguntas: " . $e->getMessage();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio</title>
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+</head>
+<body>
+    <div class="menu-bar">
+        <button onclick="location.href='inicio.php'">Inicio</button>
+        <button onclick="location.href='mis_preguntas.php'">Mis Preguntas</button>
+        <button onclick="location.href='login.php'">Iniciar Sesión</button>
+        <button onclick="location.href='register.php'">Registrarse</button>
+    </div>
+
+    <div class="content">
+        <h1>Preguntas Recientes</h1>
+        <?php foreach ($preguntas as $pregunta): ?>
+            <div class="pregunta">
+                <h2><?php echo htmlspecialchars($pregunta['titulo']); ?></h2>
+                <p><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
+                <p>Publicado por: <?php echo htmlspecialchars($pregunta['nombre_usuario']); ?> el <?php echo $pregunta['fecha_publicacion']; ?></p>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</body>
+</html> 
