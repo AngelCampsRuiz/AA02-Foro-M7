@@ -4,7 +4,7 @@
 // Configuración de la base de datos
 $dbHost = 'localhost';
 $dbName = 'ForoDB';
-$dbUser = 'root';
+$dbUser = 'Agustin51';
 $dbPass = '';
 
 try {
