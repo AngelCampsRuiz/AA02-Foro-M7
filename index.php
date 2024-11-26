@@ -20,15 +20,24 @@ try {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
 </head>
 <body>
     <div class="menu-bar">
         <button onclick="location.href='inicio.php'">Inicio</button>
-        <button onclick="location.href='mis_preguntas.php'">Mis Preguntas</button>
-        <button onclick="location.href='login.php'">Iniciar Sesión</button>
-        <button onclick="location.href='register.php'">Registrarse</button>
+        <button onclick="location.href='./Paginas/mis_preguntas.php'">Mis Preguntas</button>
+        <?php if (isset($_SESSION['usuario_id'])): ?>
+            <span>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_real']); ?>!</span>
+            <br>
+            <br>
+            <button onclick="location.href='cerrar_sesion.php'">Cerrar Sesión</button>
+        <?php else: ?>
+            <button onclick="location.href='login.php'">Iniciar Sesión</button>
+            <button onclick="location.href='register.php'">Registrarse</button>
+        <?php endif; ?>
+        <button onclick="location.href='./Paginas/form_preguntas.php'">Hacer pregunta</button>
     </div>
 
     <div class="content">
@@ -42,4 +51,4 @@ try {
         <?php endforeach; ?>
     </div>
 </body>
-</html> 
+</html>
