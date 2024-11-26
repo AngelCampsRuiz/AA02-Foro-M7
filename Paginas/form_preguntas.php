@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Formulario de Preguntas</title>
     <link rel="stylesheet" href="../Styles/estilos.css">
+    <script href="./Js/valida.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -49,10 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="mb-3">
                 <label for="titulo" class="form-label">Introduce un título:</label>
                 <input type="text" class="form-control" id="titulo" name="titulo" required>
+                <span id="error-titulo" style="color: red;"></span> 
+
             </div>
             <div class="mb-3">
                 <label for="pregunta" class="form-label">Introduce una pregunta:</label>
                 <textarea id="pregunta" name="pregunta" rows="4" class="form-control" required></textarea>
+                <span id="error-pregunta" style="color: red;"></span> 
             </div>
             <button type="submit" class="btn btn-primary">Enviar</button>
         </form>
