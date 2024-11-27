@@ -45,6 +45,8 @@ try {
             <div class="pregunta">
                 <h2><?php echo htmlspecialchars($pregunta['titulo']); ?></h2>
                 <p><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
+                <button onclick="location.href='./Paginas/ver_respuestas.php'">Ver respuestas</button>
+
                 <p>Publicado por: <?php echo htmlspecialchars($pregunta['nombre_usuario']); ?> el <?php echo $pregunta['fecha_publicacion']; ?></p>
             </div>
         <?php endforeach; ?>
