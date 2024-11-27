@@ -12,6 +12,14 @@ h1 {
     margin: 20px 0;
 }
 
+.text-center {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
 .menu-bar {
     background-color: #25D366;
     padding: 10px;
@@ -47,7 +55,7 @@ h1 {
 
 .pregunta {
     border-bottom: 1px solid #ddd;
-    padding: 10px 0;
+    padding: 10px 10px;
 }
 
 .pregunta h2 {
