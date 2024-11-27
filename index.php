@@ -28,9 +28,6 @@ try {
     <div class="menu-bar">
         <button onclick="location.href='./Paginas/mis_preguntas.php'">Mis Preguntas</button>
         <?php if (isset($_SESSION['usuario_id'])): ?>
-            <span>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_real']); ?>!</span>
-            <br>
-            <br>
             <button onclick="location.href='cerrar_sesion.php'">Cerrar Sesión</button>
         <?php else: ?>
             <button onclick="location.href='login.php'">Iniciar Sesión</button>
