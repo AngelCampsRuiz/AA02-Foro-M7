@@ -9,6 +9,7 @@ CREATE TABLE usuarios (
     nombre_real VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     contrasena VARCHAR(255) NOT NULL -- Almacenada con BCRYPT
+    
 );
 
 -- Tabla de preguntas
