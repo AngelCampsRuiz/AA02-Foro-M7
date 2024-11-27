@@ -22,6 +22,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
     <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="menu-bar">
@@ -34,6 +35,24 @@ try {
         <?php endif; ?>
         <button onclick="location.href='./Paginas/form_preguntas.php'">Hacer pregunta</button>
     </div>
+
+    <!-- Script para mostrar SweetAlert si se requiere inicio de sesión -->
+    <script>
+        <?php if (isset($_GET['login_required']) && $_GET['login_required'] == 'true'): ?>
+            Swal.fire({
+                title: 'Iniciar Sesión',
+                text: 'Debes iniciar sesión para acceder a esta función.',
+                icon: 'warning',
+                confirmButtonText: 'Iniciar Sesión',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.php';
+                }
+            });
+        <?php endif; ?>
+    </script>
 
     <!-- Formulario de búsqueda -->
     <div class="search-bar">
