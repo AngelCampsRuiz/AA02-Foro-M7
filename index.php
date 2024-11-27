@@ -26,7 +26,6 @@ try {
 </head>
 <body>
     <div class="menu-bar">
-        <button onclick="location.href='inicio.php'">Inicio</button>
         <button onclick="location.href='./Paginas/mis_preguntas.php'">Mis Preguntas</button>
         <?php if (isset($_SESSION['usuario_id'])): ?>
             <span>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_real']); ?>!</span>

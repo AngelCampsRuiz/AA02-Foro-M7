@@ -4,7 +4,8 @@ include('../BDD/conexion.php');
 
 // Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../login.php");
+    echo '<div class="alert alert-danger text-center">Debes iniciar sesión para ver tus preguntas.</div>';
+    echo '<a href="../login.php" class="btn btn-primary d-block mx-auto" style="width: 200px;">Iniciar Sesión</a>';
     exit();
 }
 
