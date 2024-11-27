@@ -28,9 +28,6 @@ try {
     <div class="menu-bar">
         <button onclick="location.href='./Paginas/mis_preguntas.php'">Mis Preguntas</button>
         <?php if (isset($_SESSION['usuario_id'])): ?>
-            <span>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_real']); ?>!</span>
-            <br>
-            <br>
             <button onclick="location.href='cerrar_sesion.php'">Cerrar Sesión</button>
         <?php else: ?>
             <button onclick="location.href='login.php'">Iniciar Sesión</button>
@@ -45,6 +42,8 @@ try {
             <div class="pregunta">
                 <h2><?php echo htmlspecialchars($pregunta['titulo']); ?></h2>
                 <p><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
+                <button onclick="location.href='./Paginas/ver_respuestas.php'">Ver respuestas</button>
+
                 <p>Publicado por: <?php echo htmlspecialchars($pregunta['nombre_usuario']); ?> el <?php echo $pregunta['fecha_publicacion']; ?></p>
             </div>
         <?php endforeach; ?>
