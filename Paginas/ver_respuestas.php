@@ -99,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="respuesta">
                         <p><?php echo htmlspecialchars($respuesta['contenido']); ?></p>
                         <p>Por: <?php echo htmlspecialchars($respuesta['nombre_usuario']); ?> el <?php echo $respuesta['fecha_publicacion']; ?></p>
+                        <strong><hr></strong>
                     </div>
                 <?php endforeach; ?>
             </div>
