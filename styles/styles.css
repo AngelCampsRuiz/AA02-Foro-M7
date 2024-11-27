@@ -172,3 +172,32 @@ footer {
 .search-bar button:hover {
     background-color: #075e54;
 }
+/* ... estilos existentes ... */
+
+.form-respuesta textarea {
+    box-sizing: border-box; /*cluye el padding y el border en el cálculo del width */
+   width: calc(100% - 15px); /* Ajusta el ancho para dejar espacio a la derecha */
+   padding: 10px;
+   margin-right: 0; /* Asegúrate de que el margen derecho no afecte el ancho */
+   border: 1px solid #ddd;
+   border-radius: 5px;
+   font-size: 16px;
+   resize: vertical; /* Permite cambiar el tamaño verticalmente */
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+   transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-respuesta textarea:focus {
+   border-color: #1DAF5D;
+   box-shadow: 0 0 5px rgba(37, 211, 102, 0.5);
+   outline: none;
+}
+
+#charCount {
+    font-size: 14px;
+    color: #666;
+    text-align: right;
+    margin-top: 5px;
+    width: calc(100% 0px); /* Ajusta el ancho para que coincida con el textarea */
+    box-sizing: border-box; /* Incluye el padding en el cálculo del width */
+    padding-right: 15px; /* Añade un padding a la derecha para alinear */
+}
