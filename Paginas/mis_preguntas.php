@@ -45,6 +45,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_pregunta'])) {
         echo '<div class="alert alert-danger text-center">Error en la base de datos: ' . $e->getMessage() . '</div>';
     }
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_pregunta'])) {
+    $pregunta_id = $_POST['pregunta_id'];
+
+    try {
+        // Iniciar una transacción
+        $conexion->beginTransaction();
+
+        // Eliminar respuestas asociadas a la pregunta
+        $sql = "DELETE FROM respuestas WHERE pregunta_id = :pregunta_id";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Eliminar la pregunta
+        $sql = "DELETE FROM preguntas WHERE id = :pregunta_id AND usuario_id = :usuario_id";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
+        $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Confirmar la transacción
+        $conexion->commit();
+
+        // Redirigir para recargar la página
+        header("Location: mis_preguntas.php");
+        exit();
+    } catch (PDOException $e) {
+        // Revertir la transacción en caso de error
+        $conexion->rollBack();
+        echo '<div class="alert alert-danger text-center">Error al eliminar la pregunta: ' . $e->getMessage() . '</div>';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -78,6 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_pregunta'])) {
                                 <textarea name="descripcion" class="form-control" rows="4" required><?php echo htmlspecialchars($pregunta['descripcion']); ?></textarea>
                             </div>
                             <button type="submit" name="editar_pregunta" class="btn btn-warning">Editar Pregunta</button>
+                            <button type="submit" name="eliminar_pregunta" class="btn btn-danger">Eliminar Pregunta</button>
                         </form>
                     </div>
                 </div>
