@@ -36,8 +36,48 @@ try {
         <button onclick="location.href='./Paginas/form_preguntas.php'">Hacer pregunta</button>
     </div>
 
+    <!-- Formulario de búsqueda -->
+    <div class="search-bar">
+        <form method="GET" action="">
+            <input type="text" name="buscar_pregunta" placeholder="Buscar preguntas por título" value="<?php echo isset($_GET['buscar_pregunta']) ? htmlspecialchars($_GET['buscar_pregunta']) : ''; ?>">
+            <input type="text" name="buscar_usuario" placeholder="Buscar usuarios por nombre" value="<?php echo isset($_GET['buscar_usuario']) ? htmlspecialchars($_GET['buscar_usuario']) : ''; ?>">
+            <button type="submit">Buscar</button>
+            <button type="button" onclick="window.location.href='index.php'">Resetear</button>
+        </form>
+    </div>
+    <!-- Fin del formulario de búsqueda -->
+
     <div class="content">
         <h1>Preguntas Recientes</h1>
+        <?php
+        // Lógica de búsqueda
+        if (isset($_GET['buscar_pregunta']) && !empty($_GET['buscar_pregunta'])) {
+            $buscarPregunta = $_GET['buscar_pregunta'];
+            $sql = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.nombre_usuario 
+                    FROM preguntas p 
+                    JOIN usuarios u ON p.usuario_id = u.id 
+                    WHERE p.titulo LIKE :buscarPregunta
+                    ORDER BY p.fecha_publicacion DESC";
+            $stmt = $conexion->prepare($sql);
+            $stmt->execute(['buscarPregunta' => "%$buscarPregunta%"]);
+            $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        if (isset($_GET['buscar_usuario']) && !empty($_GET['buscar_usuario'])) {
+            $buscarUsuario = $_GET['buscar_usuario'];
+            $sqlUsuarios = "SELECT nombre_usuario, nombre_real FROM usuarios 
+                            WHERE nombre_usuario LIKE :buscarUsuario OR nombre_real LIKE :buscarUsuario";
+            $stmtUsuarios = $conexion->prepare($sqlUsuarios);
+            $stmtUsuarios->execute(['buscarUsuario' => "$buscarUsuario%"]);
+            $usuarios = $stmtUsuarios->fetchAll(PDO::FETCH_ASSOC);
+
+            echo "<h2>Usuarios encontrados:</h2>";
+            foreach ($usuarios as $usuario) {
+                echo "<p>" . htmlspecialchars($usuario['nombre_usuario']) . " (" . htmlspecialchars($usuario['nombre_real']) . ")</p>";
+            }
+        }
+        ?>
+
         <?php foreach ($preguntas as $pregunta): ?>
             <div class="pregunta">
                 <h2><?php echo htmlspecialchars($pregunta['titulo']); ?></h2>
