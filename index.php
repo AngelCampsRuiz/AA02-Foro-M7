@@ -2,7 +2,6 @@
 session_start();
 include('./BDD/conexion.php');
 
-// Obtener preguntas y respuestas de la base de datos
 $preguntas = [];
 try {
     $sql = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.nombre_usuario 
@@ -82,7 +81,7 @@ try {
             <div class="pregunta">
                 <h2><?php echo htmlspecialchars($pregunta['titulo']); ?></h2>
                 <p><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
-                <button onclick="location.href='./Paginas/ver_respuestas.php'">Ver respuestas</button>
+                <button onclick="location.href='./Paginas/ver_respuestas.php?id=<?php echo $pregunta['id']; ?>'">Ver respuestas</button>
 
                 <p>Publicado por: <?php echo htmlspecialchars($pregunta['nombre_usuario']); ?> el <?php echo $pregunta['fecha_publicacion']; ?></p>
             </div>
