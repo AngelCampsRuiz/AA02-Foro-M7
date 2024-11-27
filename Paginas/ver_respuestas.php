@@ -74,22 +74,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
-    <link rel="stylesheet" type="text/css" href="../Styles/styles.css">
     <title>Respuestas</title>
-    <link rel="stylesheet" type="text/css" href="../styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="../Styles/styles.css">
 </head>
 <body>
-    <div class="content">
+    <div class="content pregunta">
         <h1><?php echo htmlspecialchars($pregunta['titulo']); ?></h1>
         <p><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
         <p>Publicado por: <?php echo htmlspecialchars($pregunta['nombre_usuario']); ?> el <?php echo $pregunta['fecha_publicacion']; ?></p>
 
         <?php if (isset($_SESSION['usuario_id'])): ?>
-            <form method="POST" class="form-respuesta">
+            <form method="POST" class="form-respuesta pregunta">
                 <textarea name="contenido" rows="3" maxlength="500" placeholder="Escribe tu respuesta aquí..." required></textarea>
                 <br>
-                <button type="submit">Responder</button>
+                <button type="submit" class="btn-form-pregunta">Responder</button>
             </form>
         <?php endif; ?>
 
@@ -106,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php else: ?>
             <p>No hay respuestas para esta pregunta.</p>
         <?php endif; ?>
+        <a href="../index.php" class="btn-form-pregunta" style="width: 200px;">Volver al inicio</a>
     </div>
 </body>
 </html>
