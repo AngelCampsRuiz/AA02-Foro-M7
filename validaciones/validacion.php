@@ -25,13 +25,15 @@ function validarRegistro($datos) {
         'usuario' => '',
         'nombre_real' => '',
         'correo' => '',
-        'contrasena' => ''
+        'contrasena' => '',
+        'confirmar_contrasena' => ''
     ];
 
     $usuario = sanitizarEntrada($datos['usuario']);
     $nombre_real = sanitizarEntrada($datos['nombre_real']);
     $correo = sanitizarEntrada($datos['correo']);
     $contrasena = $datos['contrasena']; // No sanitizar contraseñas
+    $confirmar_contrasena = $datos['confirmar_contrasena'];
 
     if (!validarUsuario($usuario)) {
         $errores['usuario'] = "El nombre de usuario no puede estar vacío y solo puede contener letras y espacios.";
@@ -44,6 +46,9 @@ function validarRegistro($datos) {
     }
     if (!validarContrasena($contrasena)) {
         $errores['contrasena'] = "La contraseña debe tener al menos 4 caracteres, una mayúscula, una minúscula y un número.";
+    }
+    if ($contrasena !== $confirmar_contrasena) {
+        $errores['confirmar_contrasena'] = "Las contraseñas no coinciden.";
     }
 
     return $errores;

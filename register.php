@@ -8,7 +8,8 @@ $errores = [
     'usuario' => '',
     'nombre_real' => '',
     'correo' => '',
-    'contrasena' => ''
+    'contrasena' => '',
+    'confirmar_contrasena' => ''
 ];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -66,6 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <br>
                 <input type="password" name="contrasena" placeholder="Contraseña">
                 <span class="error"><?php echo $errores['contrasena']; ?></span>
+                <br>
+                <input type="password" name="confirmar_contrasena" placeholder="Confirmar Contraseña">
+                <span class="error"><?php echo $errores['confirmar_contrasena']; ?></span>
                 <br>
                 <input type="submit" value="Registrar">
             </form>

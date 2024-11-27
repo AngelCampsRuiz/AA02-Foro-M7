@@ -4,7 +4,7 @@
 $dbHost = 'localhost';
 $dbName = 'ForoDB';
 $dbUser = 'root';
-$dbPass = 'Agustin51';
+$dbPass = '';
 
 try {
     // Crear una nueva conexión PDO

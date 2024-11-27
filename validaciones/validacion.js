@@ -3,6 +3,7 @@ function inicializarValidaciones() {
     const nombreRealInput = document.querySelector('input[name="nombre_real"]');
     const correoInput = document.querySelector('input[name="correo"]');
     const contrasenaInput = document.querySelector('input[name="contrasena"]');
+    const confirmarContrasenaInput = document.querySelector('input[name="confirmar_contrasena"]');
 
     usuarioInput.onblur = function() {
         validarUsuario(usuarioInput);
@@ -18,6 +19,10 @@ function inicializarValidaciones() {
 
     contrasenaInput.onblur = function() {
         validarContrasena(contrasenaInput);
+    };
+
+    confirmarContrasenaInput.onblur = function() {
+        validarConfirmarContrasena(contrasenaInput, confirmarContrasenaInput);
     };
 }
 
@@ -62,6 +67,17 @@ function validarContrasena(input) {
         errorSpan.textContent = 'La contraseña no puede estar vacía.';
     } else if (!passwordPattern.test(input.value)) {
         errorSpan.textContent = 'La contraseña debe tener al menos 4 caracteres, una mayúscula, una minúscula y un número.';
+    } else {
+        errorSpan.textContent = '';
+    }
+}
+
+function validarConfirmarContrasena(contrasenaInput, confirmarContrasenaInput) {
+    const errorSpan = confirmarContrasenaInput.nextElementSibling;
+    if (confirmarContrasenaInput.value.trim() === '') {
+        errorSpan.textContent = 'La confirmación de la contraseña no puede estar vacía.';
+    } else if (confirmarContrasenaInput.value !== contrasenaInput.value) {
+        errorSpan.textContent = 'Las contraseñas no coinciden.';
     } else {
         errorSpan.textContent = '';
     }
