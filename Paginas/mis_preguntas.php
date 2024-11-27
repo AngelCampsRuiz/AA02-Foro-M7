@@ -53,10 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_pregunta'])) {
     <meta charset="UTF-8">
     <title>Mis Preguntas</title>
     <link rel="stylesheet" href="../Styles/estilos.css">
+    <link rel="stylesheet" href="../Styles/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container my-5">
+    <div class="container my-5 pregunta">
         <h1 class="text-center mb-4">Mis Preguntas</h1>
 
         <!-- Listado de preguntas -->
@@ -87,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_pregunta'])) {
         <?php endif; ?>
 
         <!-- Botón de Volver -->
-        <a href="../index.php" class="btn btn-secondary mt-3">Volver al inicio</a>
+        <a href="../index.php" class="btn-form-pregunta" style="width: 200px;">Volver al inicio</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
