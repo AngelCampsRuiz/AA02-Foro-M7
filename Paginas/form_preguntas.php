@@ -53,13 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="mb-3">
                 <label for="pregunta" class="form-label">Introduce una pregunta:</label>
-                <textarea id="pregunta" name="pregunta" rows="4" class="form-control" required></textarea>
+                <textarea id="pregunta" name="pregunta" rows="4" class="form-control" maxlength="500" required oninput="updateCharCount(this)"></textarea>
+                <div id="charCount">0/500</div>
                 <span id="error-pregunta" style="color: red;"></span> 
             </div>
             <button type="submit" class="btn btn-primary">Enviar</button>
         </form>
         <a href="../index.php" class="btn-form-pregunta" style="width: 200px;">Volver al inicio</a>
     </div>
+    <script src="../Js/contadorCaracteres.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
