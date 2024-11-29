@@ -4,7 +4,14 @@ include('./BDD/conexion.php');
 
 $preguntas = [];
 try {
-    $sql = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.nombre_usuario 
+    // Consulta para obtener preguntas con el conteo de respuestas
+    $sql = "SELECT 
+                p.id, 
+                p.titulo, 
+                p.descripcion, 
+                p.fecha_publicacion, 
+                u.nombre_usuario,
+                (SELECT COUNT(*) FROM respuestas r WHERE r.pregunta_id = p.id) AS total_respuestas
             FROM preguntas p 
             JOIN usuarios u ON p.usuario_id = u.id 
             ORDER BY p.fecha_publicacion DESC";
@@ -71,7 +78,13 @@ try {
         // Lógica de búsqueda
         if (isset($_GET['buscar_pregunta']) && !empty($_GET['buscar_pregunta'])) {
             $buscarPregunta = $_GET['buscar_pregunta'];
-            $sql = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.nombre_usuario 
+            $sql = "SELECT 
+                        p.id, 
+                        p.titulo, 
+                        p.descripcion, 
+                        p.fecha_publicacion, 
+                        u.nombre_usuario,
+                        (SELECT COUNT(*) FROM respuestas r WHERE r.pregunta_id = p.id) AS total_respuestas
                     FROM preguntas p 
                     JOIN usuarios u ON p.usuario_id = u.id 
                     WHERE p.titulo LIKE :buscarPregunta
@@ -100,8 +113,9 @@ try {
             <div class="pregunta">
                 <h2><?php echo htmlspecialchars($pregunta['titulo']); ?></h2>
                 <p><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
-                <button onclick="location.href='./Paginas/ver_respuestas.php?id=<?php echo $pregunta['id']; ?>'">Ver respuestas</button>
-
+                <button onclick="location.href='./Paginas/ver_respuestas.php?id=<?php echo $pregunta['id']; ?>'">
+                    Ver respuestas (<?php echo $pregunta['total_respuestas']; ?>)
+                </button>
                 <p>Publicado por: <?php echo htmlspecialchars($pregunta['nombre_usuario']); ?> el <?php echo $pregunta['fecha_publicacion']; ?></p>
             </div>
         <?php endforeach; ?>

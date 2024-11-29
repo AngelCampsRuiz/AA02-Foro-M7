@@ -12,6 +12,7 @@ $pregunta_id = (int)$_GET['id'];
 $pregunta = null;
 $respuestas = [];
 try {
+    // Consultar la pregunta
     $sql_pregunta = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.nombre_usuario 
                      FROM preguntas p 
                      JOIN usuarios u ON p.usuario_id = u.id 
@@ -26,6 +27,7 @@ try {
         exit();
     }
 
+    // Consultar las respuestas
     $sql_respuestas = "SELECT r.id, r.contenido, r.fecha_publicacion, u.nombre_usuario 
                        FROM respuestas r 
                        JOIN usuarios u ON r.usuario_id = u.id 
@@ -36,7 +38,7 @@ try {
     $stmt_respuestas->execute();
     $respuestas = $stmt_respuestas->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo "Error al obtener datos: " . $e->getMessage();
+    echo "Error al obtener datos: " . htmlspecialchars($e->getMessage());
     exit();
 }
 
@@ -50,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!empty($contenido) && strlen($contenido) <= 500) {
             try {
+                $conexion->beginTransaction();
+
                 $sql_insert_respuesta = "INSERT INTO respuestas (contenido, usuario_id, pregunta_id) 
                                          VALUES (:contenido, :usuario_id, :pregunta_id)";
                 $stmt_insert = $conexion->prepare($sql_insert_respuesta);
@@ -58,10 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt_insert->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
                 $stmt_insert->execute();
 
+                $conexion->commit();
+
                 header("Location: ver_respuestas.php?id=$pregunta_id");
                 exit();
             } catch (PDOException $e) {
-                echo "Error al insertar respuesta: " . $e->getMessage();
+                $conexion->rollBack();
+                echo "<div class='alert alert-danger'>Error al insertar respuesta: " . htmlspecialchars($e->getMessage()) . "</div>";
             }
         } else {
             echo "<script>alert('La respuesta debe tener entre 1 y 500 caracteres.');</script>";
@@ -80,13 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="content pregunta">
         <h1><?php echo htmlspecialchars($pregunta['titulo']); ?></h1>
-        <p><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
-        <p>Publicado por: <?php echo htmlspecialchars($pregunta['nombre_usuario']); ?> el <?php echo $pregunta['fecha_publicacion']; ?></p>
+        <p><?php echo nl2br(htmlspecialchars($pregunta['descripcion'])); ?></p>
+        <p>Publicado por: <?php echo htmlspecialchars($pregunta['nombre_usuario']); ?> el <?php echo htmlspecialchars($pregunta['fecha_publicacion']); ?></p>
 
         <?php if (isset($_SESSION['usuario_id'])): ?>
             <form method="POST" class="form-respuesta pregunta">
-                <textarea name="contenido" rows="3" maxlength="500" placeholder="Escribe tu respuesta aquí..." required oninput="updateCharCount(this)"></textarea>
-                <div id="charCount">0/500</div>
+                <textarea name="contenido" rows="3" maxlength="500" placeholder="Escribe tu respuesta aquí..." required></textarea>
                 <br>
                 <button type="submit" class="btn-form-pregunta">Responder</button>
             </form>
@@ -97,9 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h3>Respuestas:</h3>
                 <?php foreach ($respuestas as $respuesta): ?>
                     <div class="respuesta">
-                        <p><?php echo htmlspecialchars($respuesta['contenido']); ?></p>
-                        <p>Por: <?php echo htmlspecialchars($respuesta['nombre_usuario']); ?> el <?php echo $respuesta['fecha_publicacion']; ?></p>
-                        <strong><hr></strong>
+                        <p><?php echo nl2br(htmlspecialchars($respuesta['contenido'])); ?></p>
+                        <p>Por: <?php echo htmlspecialchars($respuesta['nombre_usuario']); ?> el <?php echo htmlspecialchars($respuesta['fecha_publicacion']); ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -108,7 +113,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
         <a href="../index.php" class="btn-form-pregunta" style="width: 200px;">Volver al inicio</a>
     </div>
-
-    <script src="../Js/contadorCaracteres.js"></script>
 </body>
 </html>

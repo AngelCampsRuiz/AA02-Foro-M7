@@ -2,15 +2,67 @@
 session_start();
 include('../BDD/conexion.php');
 
-   // Verificar si el usuario ha iniciado sesión
-   if (!isset($_SESSION['usuario_id'])) {
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../index.php?login_required=true");
     exit();
 }
 
 $usuario_id = $_SESSION['usuario_id'];
 
-$preguntas = [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['editar_pregunta'])) {
+        $pregunta_id = $_POST['pregunta_id'];
+        $titulo = trim($_POST['titulo']);
+        $descripcion = trim($_POST['descripcion']);
+
+        try {
+            // Actualizar la pregunta en la base de datos
+            $sql = "UPDATE preguntas SET titulo = :titulo, descripcion = :descripcion WHERE id = :pregunta_id AND usuario_id = :usuario_id";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bindParam(':titulo', $titulo, PDO::PARAM_STR);
+            $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+            $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
+            $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            echo '<div class="alert alert-success text-center">Pregunta actualizada con éxito.</div>';
+        } catch (PDOException $e) {
+            echo '<div class="alert alert-danger text-center">Error al actualizar la pregunta: ' . $e->getMessage() . '</div>';
+        }
+    } elseif (isset($_POST['eliminar_pregunta'])) {
+        $pregunta_id = $_POST['pregunta_id'];
+
+        try {
+            // Iniciar una transacción
+            $conexion->beginTransaction();
+
+            // Eliminar respuestas asociadas a la pregunta
+            $sql = "DELETE FROM respuestas WHERE pregunta_id = :pregunta_id";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Eliminar la pregunta
+            $sql = "DELETE FROM preguntas WHERE id = :pregunta_id AND usuario_id = :usuario_id";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
+            $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Confirmar la transacción
+            $conexion->commit();
+
+            echo '<div class="alert alert-success text-center">Pregunta eliminada con éxito.</div>';
+        } catch (PDOException $e) {
+            // Revertir la transacción en caso de error
+            $conexion->rollBack();
+            echo '<div class="alert alert-danger text-center">Error al eliminar la pregunta: ' . $e->getMessage() . '</div>';
+        }
+    }
+}
+
+// Consultar preguntas actualizadas después de cualquier operación POST
 try {
     $sql = "SELECT p.id, p.titulo, p.descripcion FROM preguntas p WHERE p.usuario_id = :usuario_id";
     $stmt = $conexion->prepare($sql);
@@ -19,63 +71,6 @@ try {
     $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Error al obtener preguntas: " . $e->getMessage();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_pregunta'])) {
-    $pregunta_id = $_POST['pregunta_id'];
-    $titulo = trim($_POST['titulo']);
-    $descripcion = trim($_POST['descripcion']);
-
-    try {
-        // Actualizar la pregunta en la base de datos
-        $sql = "UPDATE preguntas SET titulo = :titulo, descripcion = :descripcion WHERE id = :pregunta_id AND usuario_id = :usuario_id";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':titulo', $titulo, PDO::PARAM_STR);
-        $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
-        $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
-        $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
-
-        if ($stmt->execute()) {
-            echo '<div class="alert alert-success text-center">Pregunta actualizada con éxito.</div>';
-        } else {
-            echo '<div class="alert alert-danger text-center">Error al actualizar la pregunta.</div>';
-        }
-    } catch (PDOException $e) {
-        echo '<div class="alert alert-danger text-center">Error en la base de datos: ' . $e->getMessage() . '</div>';
-    }
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_pregunta'])) {
-    $pregunta_id = $_POST['pregunta_id'];
-
-    try {
-        // Iniciar una transacción
-        $conexion->beginTransaction();
-
-        // Eliminar respuestas asociadas a la pregunta
-        $sql = "DELETE FROM respuestas WHERE pregunta_id = :pregunta_id";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Eliminar la pregunta
-        $sql = "DELETE FROM preguntas WHERE id = :pregunta_id AND usuario_id = :usuario_id";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
-        $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Confirmar la transacción
-        $conexion->commit();
-
-        // Redirigir para recargar la página
-        header("Location: mis_preguntas.php");
-        exit();
-    } catch (PDOException $e) {
-        // Revertir la transacción en caso de error
-        $conexion->rollBack();
-        echo '<div class="alert alert-danger text-center">Error al eliminar la pregunta: ' . $e->getMessage() . '</div>';
-    }
 }
 ?>
 
