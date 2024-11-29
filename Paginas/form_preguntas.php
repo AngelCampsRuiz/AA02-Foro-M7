@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo '<div class="alert alert-danger text-center">Error al publicar la pregunta. Inténtalo nuevamente.</div>';
         }
     } catch (PDOException $e) {
+        $conexion->rollBack();
         echo '<div class="alert alert-danger text-center">Error en la base de datos: ' . $e->getMessage() . '</div>';
     }
 }

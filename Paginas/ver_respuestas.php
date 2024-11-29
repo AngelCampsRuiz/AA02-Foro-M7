@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "<div class='alert alert-danger'>Error al insertar respuesta: " . htmlspecialchars($e->getMessage()) . "</div>";
             }
         } else {
-            echo "<script>alert('La respuesta debe tener entre 1 y 500 caracteres.');</script>";
+            echo "La respuesta debe tener entre 1 y 500 caracteres.";
         }
     }
 }
