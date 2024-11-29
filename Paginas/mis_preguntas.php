@@ -100,11 +100,11 @@ try {
                             <input type="hidden" name="pregunta_id" value="<?php echo $pregunta['id']; ?>">
                             <div class="mb-3">
                                 <label for="titulo" class="form-label">Nuevo Título:</label>
-                                <input type="text" name="titulo" class="form-control" value="<?php echo htmlspecialchars($pregunta['titulo']); ?>" required>
+                                <input type="text" name="titulo" class="form-control" value="<?php echo htmlspecialchars($pregunta['titulo']); ?>">
                             </div>
                             <div class="mb-3">
                                 <label for="descripcion" class="form-label">Nueva Descripción:</label>
-                                <textarea name="descripcion" class="form-control" rows="4" required><?php echo htmlspecialchars($pregunta['descripcion']); ?></textarea>
+                                <textarea name="descripcion" class="form-control" rows="4" ><?php echo htmlspecialchars($pregunta['descripcion']); ?></textarea>
                             </div>
                             <button type="submit" name="editar_pregunta" class="btn btn-warning">Editar Pregunta</button>
                             <button type="submit" name="eliminar_pregunta" class="btn btn-danger">Eliminar Pregunta</button>

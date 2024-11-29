@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if (isset($_SESSION['usuario_id'])): ?>
             <form method="POST" class="form-respuesta pregunta">
-                <textarea name="contenido" rows="3" maxlength="500" placeholder="Escribe tu respuesta aquí..." required oninput="updateCharCount(this)"></textarea>
+                <textarea name="contenido" rows="3" maxlength="500" placeholder="Escribe tu respuesta aquí..."  oninput="updateCharCount(this)"></textarea>
                 <div id="charCount">0/500</div>
                 <br>
                 <button type="submit" class="btn-form-pregunta">Responder</button>

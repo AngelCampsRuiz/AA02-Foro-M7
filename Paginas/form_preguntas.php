@@ -48,12 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="form_preguntas.php" method="POST">
             <div class="mb-3">
                 <label for="titulo" class="form-label">Introduce un título:</label>
-                <input type="text" class="form-control" id="titulo" name="titulo" required>
+                <input type="text" class="form-control" id="titulo" name="titulo" >
                 <span id="error-titulo" style="color: red;"></span> 
             </div>
             <div class="mb-3">
                 <label for="pregunta" class="form-label">Introduce una pregunta:</label>
-                <textarea id="pregunta" name="pregunta" rows="4" class="form-control" maxlength="500" required oninput="updateCharCount(this)"></textarea>
+                <textarea id="pregunta" name="pregunta" rows="4" class="form-control" maxlength="500" oninput="updateCharCount(this)"></textarea>
                 <div id="charCount">0/500</div>
                 <span id="error-pregunta" style="color: red;"></span> 
             </div>
