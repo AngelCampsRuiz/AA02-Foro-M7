@@ -76,14 +76,16 @@ try {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Mis Preguntas</title>
     <link rel="stylesheet" href="../Styles/estilos.css">
     <link rel="stylesheet" href="../Styles/styles.css">
-    <script href="./Js/valida.js"></script>
+    <script src="../validaciones/validarEdicion.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container my-5 pregunta">
         <h1 class="text-center mb-4">Mis Preguntas</h1>
@@ -104,11 +106,34 @@ try {
                             </div>
                             <div class="mb-3">
                                 <label for="descripcion" class="form-label">Nueva Descripción:</label>
-                                <textarea name="descripcion" class="form-control" rows="4" ><?php echo htmlspecialchars($pregunta['descripcion']); ?></textarea>
+                                <textarea name="descripcion" class="form-control" rows="4" maxlength="500" oninput="updateCharCount(this)"><?php echo htmlspecialchars($pregunta['descripcion']); ?></textarea>
+                                <div id="charCount">0/500</div>
                             </div>
-                            <button type="submit" name="editar_pregunta" class="btn btn-warning">Editar Pregunta</button>
-                            <button type="submit" name="eliminar_pregunta" class="btn btn-danger">Eliminar Pregunta</button>
+                            <button type="submit" name="editar_pregunta" class="btn btn-warning" disabled>Editar Pregunta</button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal-<?php echo $pregunta['id']; ?>">Eliminar Pregunta</button>
                         </form>
+                    </div>
+                </div>
+
+                <!-- Modal de confirmación -->
+                <div class="modal fade" id="confirmModal-<?php echo $pregunta['id']; ?>" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmModalLabel">Confirmar Eliminación</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estás seguro de que deseas eliminar esta pregunta?
+                            </div>
+                            <div class="modal-footer">
+                                <form method="POST" action="mis_preguntas.php" style="display:inline;">
+                                    <input type="hidden" name="pregunta_id" value="<?php echo $pregunta['id']; ?>">
+                                    <button type="submit" name="eliminar_pregunta" class="btn btn-danger">Eliminar</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -119,7 +144,8 @@ try {
         <!-- Botón de Volver -->
         <a href="../index.php" class="btn-form-pregunta" style="width: 200px;">Volver al inicio</a>
     </div>
-
+    <script src="../Js/contadorCaracteres.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

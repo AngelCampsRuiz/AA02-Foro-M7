@@ -41,6 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Formulario de Preguntas</title>
     <link rel="stylesheet" href="./../Styles/styles.css">
     <script src="./Js/valida.js"></script>
+    <script src="../Js/contadorCaracteres.js"></script>
+    <script src="../validaciones/validarFormulario.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -49,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="form_preguntas.php" method="POST">
             <div class="mb-3">
                 <label for="titulo" class="form-label">Introduce un título:</label>
-                <input type="text" class="form-control" id="titulo" name="titulo" >
+                <input type="text" class="form-control" id="titulo" name="titulo">
                 <span id="error-titulo" style="color: red;"></span> 
             </div>
             <div class="mb-3">
@@ -58,11 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div id="charCount">0/500</div>
                 <span id="error-pregunta" style="color: red;"></span> 
             </div>
-            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="submit" class="btn btn-primary" disabled>Enviar</button>
         </form>
         <a href="../index.php" class="btn-form-pregunta" style="width: 200px;">Volver al inicio</a>
     </div>
-    <script src="../Js/contadorCaracteres.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

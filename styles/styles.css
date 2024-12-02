@@ -201,3 +201,14 @@ footer {
     box-sizing: border-box; /* Incluye el padding en el cálculo del width */
     padding-right: 15px; /* Añade un padding a la derecha para alinear */
 }
+
+.respuesta p {
+    word-wrap: break-word; /* Permite que las palabras largas se dividan y se ajusten al contenedor */
+    white-space: pre-wrap; /* Mantiene los saltos de línea y ajusta el texto al contenedor */
+}
+
+button:disabled {
+    background-color: #ccc !important; /* Asegúrate de que este estilo tenga prioridad */
+    cursor: not-allowed;
+    opacity: 0.6;
+}

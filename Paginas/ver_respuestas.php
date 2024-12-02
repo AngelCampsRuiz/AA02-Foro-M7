@@ -83,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Respuestas</title>
     <link rel="stylesheet" type="text/css" href="../Styles/styles.css">
+    <script src="../validaciones/validarRespuesta.js"></script>
 </head>
 <body>
     <div class="content pregunta">
@@ -92,10 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if (isset($_SESSION['usuario_id'])): ?>
             <form method="POST" class="form-respuesta pregunta">
-                <textarea name="contenido" rows="3" maxlength="500" placeholder="Escribe tu respuesta aquí..."  oninput="updateCharCount(this)"></textarea>
+                <textarea name="contenido" rows="3" maxlength="500" placeholder="Escribe tu respuesta aquí..." oninput="updateCharCount(this)"></textarea>
                 <div id="charCount">0/500</div>
                 <br>
-                <button type="submit" class="btn-form-pregunta">Responder</button>
+                <button type="submit" class="btn-form-pregunta" disabled>Responder</button>
             </form>
         <?php endif; ?>
 
