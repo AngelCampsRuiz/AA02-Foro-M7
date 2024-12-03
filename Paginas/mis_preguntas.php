@@ -2,7 +2,6 @@
 session_start();
 include('../BDD/conexion.php');
 
-// Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../index.php?login_required=true");
     exit();
@@ -16,19 +15,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $titulo = trim($_POST['titulo']);
         $descripcion = trim($_POST['descripcion']);
 
-        try {
-            // Actualizar la pregunta en la base de datos
-            $sql = "UPDATE preguntas SET titulo = :titulo, descripcion = :descripcion WHERE id = :pregunta_id AND usuario_id = :usuario_id";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bindParam(':titulo', $titulo, PDO::PARAM_STR);
-            $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
-            $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
-            $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
-            $stmt->execute();
+        // Validación del lado del servidor
+        if (empty($titulo) || empty($descripcion)) {
+            echo '<div class="alert alert-danger text-center">Los campos no pueden estar vacíos.</div>';
+        } else {
+            try {
+                // Actualizar la pregunta en la base de datos
+                $sql = "UPDATE preguntas SET titulo = :titulo, descripcion = :descripcion WHERE id = :pregunta_id AND usuario_id = :usuario_id";
+                $stmt = $conexion->prepare($sql);
+                $stmt->bindParam(':titulo', $titulo, PDO::PARAM_STR);
+                $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+                $stmt->bindParam(':pregunta_id', $pregunta_id, PDO::PARAM_INT);
+                $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+                $stmt->execute();
 
-            echo '<div class="alert alert-success text-center">Pregunta actualizada con éxito.</div>';
-        } catch (PDOException $e) {
-            echo '<div class="alert alert-danger text-center">Error al actualizar la pregunta: ' . $e->getMessage() . '</div>';
+                echo '<div class="alert alert-success text-center">Pregunta actualizada con éxito.</div>';
+            } catch (PDOException $e) {
+                echo '<div class="alert alert-danger text-center">Error al actualizar la pregunta: ' . $e->getMessage() . '</div>';
+            }
         }
     } elseif (isset($_POST['eliminar_pregunta'])) {
         $pregunta_id = $_POST['pregunta_id'];
@@ -55,14 +59,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             echo '<div class="alert alert-success text-center">Pregunta eliminada con éxito.</div>';
         } catch (PDOException $e) {
-            // Revertir la transacción en caso de error
+            // Rollback
             $conexion->rollBack();
             echo '<div class="alert alert-danger text-center">Error al eliminar la pregunta: ' . $e->getMessage() . '</div>';
         }
     }
 }
 
-// Consultar preguntas actualizadas después de cualquier operación POST
+// Consultar preguntas actualizadas 
 try {
     $sql = "SELECT p.id, p.titulo, p.descripcion FROM preguntas p WHERE p.usuario_id = :usuario_id";
     $stmt = $conexion->prepare($sql);
@@ -82,8 +86,15 @@ try {
     <title>Mis Preguntas</title>
     <link rel="stylesheet" href="../Styles/estilos.css">
     <link rel="stylesheet" href="../Styles/styles.css">
-    <script src="../validaciones/validarEdicion.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function validarFormulario(form) {
+            const titulo = form.titulo.value.trim();
+            const descripcion = form.descripcion.value.trim();
+            const botonEditar = form.querySelector('button[name="editar_pregunta"]');
+            botonEditar.disabled = !(titulo && descripcion);
+        }
+    </script>
 </head>
 
 <body>
@@ -98,7 +109,7 @@ try {
                         <h5 class="card-title"><?php echo htmlspecialchars($pregunta['titulo']); ?></h5>
                         <p class="card-text"><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
                         <!-- Formulario para editar -->
-                        <form method="POST" action="mis_preguntas.php">
+                        <form method="POST" action="mis_preguntas.php" oninput="validarFormulario(this)">
                             <input type="hidden" name="pregunta_id" value="<?php echo $pregunta['id']; ?>">
                             <div class="mb-3">
                                 <label for="titulo" class="form-label">Nuevo Título:</label>
@@ -106,8 +117,7 @@ try {
                             </div>
                             <div class="mb-3">
                                 <label for="descripcion" class="form-label">Nueva Descripción:</label>
-                                <textarea name="descripcion" class="form-control" rows="4" maxlength="500" oninput="updateCharCount(this)"><?php echo htmlspecialchars($pregunta['descripcion']); ?></textarea>
-                                <div id="charCount">0/500</div>
+                                <textarea name="descripcion" class="form-control" rows="4" maxlength="500"><?php echo htmlspecialchars($pregunta['descripcion']); ?></textarea>
                             </div>
                             <button type="submit" name="editar_pregunta" class="btn btn-warning" disabled>Editar Pregunta</button>
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal-<?php echo $pregunta['id']; ?>">Eliminar Pregunta</button>
@@ -115,7 +125,6 @@ try {
                     </div>
                 </div>
 
-                <!-- Modal de confirmación -->
                 <div class="modal fade" id="confirmModal-<?php echo $pregunta['id']; ?>" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -141,10 +150,8 @@ try {
             <p class="text-center">No tienes preguntas publicadas aún.</p>
         <?php endif; ?>
 
-        <!-- Botón de Volver -->
         <a href="../index.php" class="btn-form-pregunta" style="width: 200px;">Volver al inicio</a>
     </div>
-    <script src="../Js/contadorCaracteres.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
