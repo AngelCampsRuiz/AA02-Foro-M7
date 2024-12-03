@@ -8,9 +8,15 @@ CREATE TABLE usuarios (
     nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
     nombre_real VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
+    -- rol_id INT NOT NULL DEFAULT 1,
     contrasena VARCHAR(255) NOT NULL -- Almacenada con BCRYPT
     
 );
+
+--  CREATE TABLE roles (
+--      id INT AUTO_INCREMENT PRIMARY KEY,
+--     nombre VARCHAR(50) NOT NULL UNIQUE
+--  );
 
 -- Tabla de preguntas
 CREATE TABLE preguntas (
@@ -50,3 +56,8 @@ INSERT INTO respuestas (contenido, usuario_id, pregunta_id) VALUES
 ('Puedes descargar el instalador desde el sitio oficial de MySQL.', 2, 1),
 ('Una clave primaria es un campo que identifica de manera única cada registro en una tabla.', 3, 2),
 ('Para hacer un JOIN, puedes usar la cláusula JOIN seguida del tipo de JOIN que necesitas.', 1, 3);
+
+
+
+
+
